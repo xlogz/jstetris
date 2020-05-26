@@ -64,19 +64,48 @@ document.addEventListener('DOMContentLoaded', () => {
             squares[currentColumn + index].classList.remove('tetromino');
         })
     }
-
-    document.addEventListener('keypress', rotateTetromino);
-
-    function rotateTetromino(e){
-        if(e.code === "KeyG"){
+    
+    function moveLeft(){
+        if(currentColumn >= 0){
             clear();
-            if(currentRotation === 3){
-                currentRotation = 1;
-            }else{
-                currentRotation ++;
-            }
-            current = theTetrominoes[currentBlock][currentRotation];
+            currentColumn--;
             draw();
+        }
+    }
+
+    function moveRight(){
+        if(currentColumn < 10){
+            clear();
+            currentColumn++;
+            draw();
+        }
+    }
+
+    function rotateBlock(){
+        clear();
+        if(currentRotation === 3){
+            currentRotation = 0;
+        }else{
+            currentRotation ++;
+        }
+        current = theTetrominoes[currentBlock][currentRotation];
+        draw();
+    }
+
+    document.addEventListener('keypress', detectKeyPress);
+
+
+    function detectKeyPress(e){
+        if(e.code === "KeyW"){
+            rotateBlock();
+        }
+
+        if(e.code === "KeyA"){
+            moveLeft();
+        }
+
+        if(e.code === "KeyD"){
+            moveRight();
         }
     }
 
