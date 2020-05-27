@@ -52,6 +52,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentColumn = 4;
     let currentRow = 0;
 
+    let timerId;
+
     let random = Math.floor(Math.random()*theTetrominoes.length);
 
     let currentBlock = 0;
@@ -63,28 +65,6 @@ document.addEventListener('DOMContentLoaded', () => {
     function draw(){
         current.forEach(index => {
             squares[currentColumn + index].classList.add('tetromino');
-            console.log('filling piece at: ' + (currentColumn + index));
-            console.log('checking if far right');
-            console.log (currentColumn + index-1);
-            console.log((currentColumn +index -1)%9);
-            console.log('calculating curentcolumn being in right');
-            console.log(((currentColumn + (index-1)) % 9) === 0)
-            if(currentColumn + index === 9 ||
-              currentColumn + index === 19 ||
-              currentColumn + index === 29 ||
-              currentColumn + index === 39 ||
-              currentColumn + index === 49 ||
-              currentColumn + index === 59 ||
-              currentColumn + index === 69 ||
-              currentColumn + index === 79 ||
-              currentColumn + index === 89 ||
-              currentColumn + index === 99){
-                
-              isFarRight = true;
-            }
-            if((currentColumn + index) === 0 || (currentColumn + index) % 10 === 0){
-                isFarLeft = true;
-            }
         })
     }
 
@@ -116,21 +96,36 @@ document.addEventListener('DOMContentLoaded', () => {
             clear();
             currentColumn++;
             draw();
-        }
-            
-
+        } 
     }
+
+
+    timerId = setInterval(dropPiece, 1000);
 
     function dropPiece(){
             clear();
-            currentColumn = currentColumn + 10;
+            currentColumn = currentColumn + width;
             draw();
+            stopPiece();
     }
 
-    function dropPieceLoop(){
-        dropPiece();
-        setTimeout(dropPieceLoop, 1000)
+    function stopPiece(){
+        if(current.some(index => squares[currentColumn + index + width].classList.contains('taken'))){
+            current.forEach(index => squares[currentColumn + index].classList.add('taken'))
+            //start new tetromino
+
+            random = Math.floor(Math.random() * theTetrominoes.length);
+            current = theTetrominoes[random][currentRotation]
+            currentColumn = 4
+            draw();
+        }
     }
+
+
+    // function dropPieceLoop(){
+    //     dropPiece();
+    //     setTimeout(dropPieceLoop, 1000)
+    // }
 
     function rotateBlock(){
         clear();
@@ -164,7 +159,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    dropPieceLoop();
+    // dropPieceLoop();
     
 
     draw();
