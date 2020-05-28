@@ -75,28 +75,29 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     function moveLeft(){
-        isFarRight = false;
-            if(isFarLeft){
-                console.log('is far left');
-            }else{
-                clear();
-                currentColumn--;
-                draw();
-            }
-            
+        clear();
+        const isAtLeftEdge = current.some(index=>(currentColumn + index) % width === 0)
+        if(!isAtLeftEdge){
+            currentColumn-= 1;
+        }
+
+        if(current.some(index => squares[currentColumn + index].classList.contains('taken'))) {
+            currentColumn += 1;  
+        }
+        
+        draw();
 
     }
 
     function moveRight(){
-        isFarLeft = false;
+        clear();
+        const isAtRightEdge = current.some(index => (currentColumn + index) % width === width -1)
+        if(!isAtRightEdge) currentColumn += 1;
 
-        if(isFarRight){
-            console.log('is far right');
-        }else{
-            clear();
-            currentColumn++;
-            draw();
-        } 
+        if(current.some(index=>squares[currentColumn+index].classList.contains('taken'))){
+            currentColumn -= 1;
+        }
+        draw();
     }
 
 
